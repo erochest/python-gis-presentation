@@ -14,6 +14,7 @@ main = shake shakeOptions $ do
         need [md]
         system' "pandoc" $ [ "-f", "markdown"
                            , "-t", "s5"
+                           , "--incremental"
                            , "--smart"
                            , "--standalone"
                            , "-o", html
