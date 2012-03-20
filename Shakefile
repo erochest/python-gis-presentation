@@ -1,18 +1,18 @@
 #!/usr/bin/env runhaskell
 
 import Development.Shake
+import Development.Shake.FilePath
 
-main = shake $ do
+main = shake shakeOptions $ do
     want ["index.html"]
     "*.html" *> \html -> do
         let md = html `replaceExtension` "md"
         need [md]
-        system $ [ "pandoc"
-                 , "-f", "markdown"
-                 , "-t", "s5"
-                 , "--smart"
-                 , "-o", html
-                 md
-                 ]
+        system' "pandoc" $ [ "-f", "markdown"
+                           , "-t", "s5"
+                           , "--smart"
+                           , "-o", html
+                           , md
+                           ]
 
 -- vim: set filetype=haskell:
