@@ -1,7 +1,11 @@
 #!/usr/bin/env runhaskell
 
+{-# LANGUAGE OverloadedStrings #-}
+
 import Development.Shake
 import Development.Shake.FilePath
+import Prelude hiding (FilePath)
+import Shelly
 
 main = shake shakeOptions $ do
     want ["index.html"]
@@ -11,6 +15,7 @@ main = shake shakeOptions $ do
         system' "pandoc" $ [ "-f", "markdown"
                            , "-t", "s5"
                            , "--smart"
+                           , "--standalone"
                            , "-o", html
                            , md
                            ]
