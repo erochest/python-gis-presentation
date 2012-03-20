@@ -6,8 +6,19 @@ import Development.Shake
 import Development.Shake.FilePath
 import Prelude hiding (FilePath)
 import Shelly
+import System.Environment
 
-main = shake shakeOptions $ do
+main = do
+    args <- getArgs
+    case args of
+        ("help":_)  -> do
+            putStrLn "Help M-e-e-e!"
+        ("clean":_) -> do
+            shelly $ verbosely $ rm_f "index.html"
+        _ -> rules
+
+rules = shake shakeOptions $ do
+
     want ["index.html"]
     "*.html" *> \html -> do
         let md = html `replaceExtension` "md"
