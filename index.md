@@ -195,6 +195,7 @@ for dist in distances:
 > * [PythonWin][pythonwin]
 > * [ESRI's Python Page][esripy]
 > * [arcpy][arcpy]
+> * [intro-python.zip][data] (Data used here)
 
 [python]: http://www.python.org/ "Python"
 [python26]: http://docs.python.org/release/2.6.7/ "Python 2.6 Documentation"
@@ -203,4 +204,5 @@ for dist in distances:
 [tutorial]: http://docs.python.org/release/2.6.7/tutorial/index.html "The Python Tutorial"
 [esripy]: http://www.esri.com/python "ESRI's Python Page"
 [arcpy]: http://www.esri.com/arcpy "ArcPy"
+[data]: intro-python.zip "intro-python.zip"
 
