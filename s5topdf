@@ -1,0 +1,4 @@
+#!/bin/bash
+
+runhaskell ./gist-2150126/s5topdf.lhs "$@"
+

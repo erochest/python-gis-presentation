@@ -42,9 +42,9 @@ rules = shake shakeOptions $ do
         pwd' <- liftIO $ getWorkingDirectory
         let fileUrl = ("file://" ++) . encodeString $ pwd' </> "index.html"
         need ["index.html"]
-        system' "./s5topdf.lhs" [ "17"
-                                , fileUrl
-                                , pdf
-                                ]
+        system' "./s5topdf" [ "17"
+                            , fileUrl
+                            , pdf
+                            ]
 
 -- vim: set filetype=haskell:
