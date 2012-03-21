@@ -3,10 +3,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Development.Shake
-import Development.Shake.FilePath
+import Development.Shake.FilePath hiding ((</>))
 import Prelude hiding (FilePath)
 import Shelly
 import System.Environment
+import Filesystem
+import Filesystem.Path hiding (replaceExtension)
+import Filesystem.Path.CurrentOS (encodeString)
 
 main = do
     args <- getArgs
@@ -14,7 +17,9 @@ main = do
         ("help":_)  -> do
             putStrLn "Help M-e-e-e!"
         ("clean":_) -> do
-            shelly $ verbosely $ rm_f "index.html"
+            shelly $ verbosely $ do
+                whenM (test_f "index.html")    $ rm_f "index.html"
+                whenM (test_f "pythongis.pdf") $ rm_f "pythongis.pdf"
         _ -> rules
 
 rules = shake shakeOptions $ do
@@ -23,13 +28,23 @@ rules = shake shakeOptions $ do
     "*.html" *> \html -> do
         let md = html `replaceExtension` "md"
         need [md]
-        system' "pandoc" $ [ "-f", "markdown"
-                           , "-t", "s5"
-                           , "--incremental"
-                           , "--smart"
-                           , "--standalone"
-                           , "-o", html
-                           , md
-                           ]
+        system' "pandoc" [ "-f", "markdown"
+                         , "-t", "s5"
+                         -- , "--incremental"
+                         , "--smart"
+                         , "--standalone"
+                         , "-o", html
+                         , md
+                         ]
+
+    want ["pythongis.pdf"]
+    "*.pdf" *> \pdf -> do
+        pwd' <- liftIO $ getWorkingDirectory
+        let fileUrl = ("file://" ++) . encodeString $ pwd' </> "index.html"
+        need ["index.html"]
+        system' "./s5topdf.lhs" [ "17"
+                                , fileUrl
+                                , pdf
+                                ]
 
 -- vim: set filetype=haskell:
