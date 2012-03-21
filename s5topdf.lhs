@@ -25,8 +25,10 @@ main = shelly $ verbosely $ do
     args <- liftIO $ getArgs
     case args of
         [slides', url, pdf] | all C.isNumber slides' -> do
-            downloadSlides (read slides') url >>= convert (fromString pdf)
+            pngs <- downloadSlides (read slides') url
+            convert (fromString pdf) pngs
             echo . T.pack $ "Wrote PDF to " ++ pdf
+            mapM_ rm_f pngs
         otherwise -> echo usage
 \end{code}
 
@@ -35,10 +37,11 @@ This is the usage/help message.
 \begin{code}
 usage :: T.Text
 usage = "\
-    \usage: s5topdf.lhs [slides] [url] \n\
+    \usage: s5topdf.lhs [slides] [url] [output] \n\
     \ \n\
     \  slides is the number of slides in the slideshow.\n\
-    \  url    is the URL to access the slideshow at.\n"
+    \  url    is the URL to access the slideshow at.\n\
+    \  output is the filename of the PDF file to create.\n"
 \end{code}
 
 This downloads the slides and returns the file names that were generated.
